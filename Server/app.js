@@ -1,20 +1,101 @@
-var fs = require('fs')
+var mysql = require('mysql');
+var express = require('express');
+var session = require('express-session');
+var bodyParser = require('body-parser');
+var path = require('path');
+var handlebars = require('express-handlebars').create({ defaultLayout:'main' });
+
+var connection = mysql.createConnection({
+	host     : 'localhost',
+	user     : 'root',
+	password : 'Monkeydude',
+	database : 'nodelogin'
+});
+
+var app = express();
+
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
+app.use(express.static('public'));
+
+//app.set('views', __dirname + '/Client/views');
+//app.set('view engine', 'hbs')
 
 
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
 
-// read user.json format and parse it into user  
-const dataBuffer = fs.readFileSync('includes/user.json')
-const dataJson = dataBuffer.toString()
-const user = JSON.parse(dataJson)
+app.get('/', function(request, response) {
+	
+	if (request.session.loggedin) {
+		
+        response.redirect('/home');
+        console.log(request.session.username+' is now accessing dashboard without logging in');
+	}
+	else{
+	response.render('login');
+	}
+
+});
+
+app.get('/register', function(request, response) {
+	//response.sendFile(path.join(__dirname + '/Client/Login/login.html'));
+	response.render('register');
 
 
+});
 
+app.post('/auth', function(request, response) {
+	var username = request.body.username;
+	var password = request.body.password;
+	if (username && password) {
+        console.log(username+password);
+       
+       
+        connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields){
+            console.log(results);
+            if (results.length > 0) {
+				request.session.loggedin = true;
+				request.session.username = username;
+				response.redirect('/home');
+			} else {
+				response.send('Incorrect Username and/or Password!');
+			}			
+			
+        });
+	} else {
+		response.send('Please enter Username and Password!');
+	
+	}
+});
 
-// Practice setting value 
-const name= 'Atharv'
-user.name ='Atharv'
+app.get('/home', function(request, response) {
+	if (request.session.loggedin) {
+		var data = {
+			user: request.session.username
+		 };
+        response.render('home', data);
+        console.log(request.session.username+'is now accessing dashboard');
+	} else {
+		response.send('Please login to view this page!');
+	}
+	
+});
 
+app.get('/dashboard', function(request, response) {
+	if (request.session.loggedin) {
+		
+        response.render('test3/index', { title: 'Hey', message: 'Hello there!', user: request.session.username });
+        console.log(request.session.username+'is now accessing dashboard');
+	} else {
+		response.send('Please login to view this page!');
+	}
+	
+});
 
-// Write back unique JSON object 
-const userJSON = JSON.stringify(user)
-fs.writeFileSync('Users/'+name+'.json', userJSON)
+app.listen(3000);
