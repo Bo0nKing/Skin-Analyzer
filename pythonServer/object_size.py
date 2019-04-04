@@ -11,6 +11,7 @@ import numpy as np
 import argparse
 import imutils
 import cv2
+import mysql.connector
 
 def midpoint(ptA, ptB):
 	return ((ptA[0] + ptB[0]) * 0.5, (ptA[1] + ptB[1]) * 0.5)
