@@ -14,7 +14,7 @@ import os
 
 # Establish DB connection and cursor
 #try:
- #   cnx = mysql.connector.connect(user='root',
+#   cnx = mysql.connector.connect(user='root',
 #                                password='Monkeydude',
 #                                host='localhost',
 #                                database='ooga')
@@ -57,14 +57,6 @@ import os
 #cursor.execute(add_salary, data_salary)
 
 #/*****EXAMPLE END****/
-
-
-
-
-
-
-
-
 
 
 
@@ -184,7 +176,7 @@ for c in cnts:
 	cv2.imshow("Image", orig)
 
 
-	cv2.imwrite(os.path.join('C:/Users/Atharv/Documents/Skin-Analyzer/pythonServer/components/'+str(args["user"]) , 'component'+str(countourCount)+'.jpg'), orig)
+	cv2.imwrite(os.path.join('/Users/Ooga/Desktop/Skin-Analyzer/pythonServer/components/'+str(args["user"]) , 'component'+str(countourCount)+'.jpg'), orig)
 	cv2.waitKey(0)
 
 # Make sure data is committed to the database
