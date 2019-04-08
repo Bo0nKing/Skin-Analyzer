@@ -108,14 +108,14 @@ countourCount = 0
 # loop over the contours individually
 for c in cnts:
 
+
+	# if the contour is not sufficiently large, ignore it
+	if cv2.contourArea(c) < 200:
+		continue
 	countourCount=countourCount+1
 	print(countourCount)
 	if countourCount == 1:
-	 print('This is the scaling reference, should be: '+ str(args["width"]))
-	# if the contour is not sufficiently large, ignore it
-	if cv2.contourArea(c) < 100:
-		continue
-
+	 	print('This is the scaling reference, should be: '+ str(args["width"]))
 	# compute the rotated bounding box of the contour
 	orig = image.copy()
 	box = cv2.minAreaRect(c)
