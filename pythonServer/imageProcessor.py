@@ -97,6 +97,7 @@ cnts = imutils.grab_contours(cnts)
 (cnts, _) = contours.sort_contours(cnts)
 pixelsPerMetric = None
 countourCount = 0
+print("Program starting")
 # loop over the contours individually
 for c in cnts:
 
