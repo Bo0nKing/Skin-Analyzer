@@ -30,6 +30,12 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
+
+// Data Members for Handlebars/ population:
+
+
+
+// Really shitty router setup
 app.get('/', function(request, response) {
 	
 	if (request.session.loggedin) {
@@ -98,6 +104,48 @@ app.get('/profile', function(request, response) {
 		 };
         response.render('profile', data);
         console.log(request.session.username+'is now accessing dashboard');
+	} else {
+		response.redirect('/');
+	}
+	
+});
+
+app.get('/tbTest1', function(request, response) {
+	if (request.session.loggedin) {
+		var data = {
+			user: request.session.username,
+			type: 'Patient'
+		 };
+        response.render('TBTest1', data);
+        console.log(request.session.username+'is now accessing TB Page 1');
+	} else {
+		response.redirect('/');
+	}
+	
+});
+
+app.get('/tbTest2', function(request, response) {
+	if (request.session.loggedin) {
+		var data = {
+			user: request.session.username,
+			type: 'Patient'
+		 };
+        response.render('tbTest2', data);
+        console.log(request.session.username+'is now accessing Tb Page 2');
+	} else {
+		response.redirect('/');
+	}
+	
+});
+
+app.get('/tbresults', function(request, response) {
+	if (request.session.loggedin) {
+		var data = {
+			user: request.session.username,
+			type: 'Patient'
+		 };
+        response.render('tbResults', data);
+        console.log(request.session.username+'is now accessing TB Results');
 	} else {
 		response.redirect('/');
 	}
