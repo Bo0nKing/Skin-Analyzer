@@ -1,6 +1,6 @@
 Server Login(RDP):
 User:ucsfproject1
-Pass:k+oORnNLq6>Q:#&
+Pass:sehItxUjs<eeg/.
 External IP: 35.235.93.11
 
 

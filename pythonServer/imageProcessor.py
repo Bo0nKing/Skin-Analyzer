@@ -8,57 +8,70 @@ import numpy as np
 import argparse
 import imutils
 import cv2
-#import mysql.connector
+import mysql.connector
 import os
 
-
-# Establish DB connection and cursor
-#try:
-#   cnx = mysql.connector.connect(user='root',
-#                                password='Monkeydude',
-#                                host='localhost',
-#                                database='ooga')
-#except mysql.connector.Error as err:
-#  if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
- #   print("Something is wrong with your user name or password")
- # elif err.errno == errorcode.ER_BAD_DB_ERROR:
- #   print("Database does not exist")
- # else:
-#    print(err)
-#Current Query: 
-#cursor = cnx.cursor()
-
-# Create potential query types
+patientName = 'Shannon'
+path1 = 'Desktop/testResults/' + patientName + '/results.txt'
+path2 = 'Desktop/testResults/' + patientName + '/components'
+testFailed = False
+indurationSize = 3.2
+results = 'TBneg'
+contoursDetected = 2
 
 
-#/****EXAMPLE START*****/
+def writeData(path1, path2, testFailed, indurationSize, results, contoursDetected, patientName):
+    # writes values in parameters to a text file (results.txt)
 
-#tomorrow = datetime.now().date() + timedelta(days=1)
-#add_employee = ("INSERT INTO employees "
-#               "(first_name, last_name, hire_date, gender, birth_date) "
-#              "VALUES (%s, %s, %s, %s, %s)")
-#add_salary = ("INSERT INTO salaries "
-#              "(emp_no, salary, from_date, to_date) "
-#              "VALUES (%(emp_no)s, %(salary)s, %(from_date)s, %(to_date)s)")
+    # open results.txt in writing mode (!! ASSUMES results.txt IS IN WORKING DIRECTORY !!)
+    r = open('results.txt','w')
+    # write parameter values into results.txt
+    r.write(path1 + '\n')
+    r.write(path2 + '\n')
+    r.write(str(testFailed) + '\n')
+    r.write(str(indurationSize) + '\n')
+    r.write(results + '\n')
+    r.write(str(contoursDetected) + '\n')
+    # close results.txt
+    r.close()
 
-#data_employee = ('Geert', 'Vanderkelen', tomorrow, 'M', date(1977, 6, 14))
+    #r = open('results.txt', 'r')
+    #print(r.read())
+    #r.close()
 
-# Insert new employee
-#cursor.execute(add_employee, data_employee)
-#emp_no = cursor.lastrowid
+def insertData(path1, path2, testFailed, indurationSize, results, contoursDetected, patientName):
+    # inserts values in parameters into the DB
 
-#Insert salary information
-#data_salary = {
-#  'emp_no': emp_no,
-# 'salary': 50000,
-#  'from_date': tomorrow,
-#  'to_date': date(9999, 1, 1),
-#    }
-#cursor.execute(add_salary, data_salary)
-
-#/*****EXAMPLE END****/
+    # convert testFailed from boolean to int
+    if testFailed == False:
+        testFailed = 0
+    else:
+        testFailed = 1
 
 
+    # connect to DB
+    mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="Monkeydude",
+        database="UCSF_app"
+    )
+
+    mycursor = mydb.cursor()
+
+    # run the INSERT command with the given parameters
+    sql = "INSERT INTO Results (resultsID, path1, path2, testFailed, indurationSize, results, contoursDetected, patientName) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+    val = ("32", path1, path2, str(testFailed), str(indurationSize), results, str(contoursDetected), patientName)
+    mycursor.execute(sql, val)
+
+    # commit changes
+    mydb.commit()
+
+    print(mycursor.rowcount, "record inserted.")
+
+
+writeData(path1, path2, testFailed, indurationSize, results, contoursDetected, patientName)
+insertData(path1, path2, testFailed, indurationSize, results, contoursDetected, patientName)
 
 
 # 2 (x,y tuple) return 1 (x,y tuple)

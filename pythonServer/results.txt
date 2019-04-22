@@ -1,0 +1,6 @@
+Desktop/testResults/Shannon/results.txt
+Desktop/testResults/Shannon/components
+False
+3.2
+TBneg
+2
