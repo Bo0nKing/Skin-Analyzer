@@ -1,0 +1,10 @@
+Server Login(RDP):
+User:ucsfproject1
+Pass:k+oORnNLq6>Q:#&
+External IP: 35.235.93.11
+
+
+Google Cloud:
+email: ucsfproject1@gmail.com
+Pass: UCSFproject99
+

@@ -83,7 +83,7 @@ gray = cv2.GaussianBlur(gray, (7, 7), 0)
 
 # perform edge detection, then perform a dilation + erosion to
 # close gaps in between object edges
-edged = cv2.Canny(gray, 50, 100)
+edged = cv2.Canny(gray, 50, 150)
 edged = cv2.dilate(edged, None, iterations=1)
 edged = cv2.erode(edged, None, iterations=1)
 
@@ -103,7 +103,7 @@ for c in cnts:
 
 
 	# if the contour is not sufficiently large, ignore it
-	if cv2.contourArea(c) < 200:
+	if cv2.contourArea(c) < 10:
 		continue
 	countourCount=countourCount+1
 	print(countourCount)
@@ -177,7 +177,7 @@ for c in cnts:
 	cv2.imshow("Image", orig)
 
 
-	cv2.imwrite(os.path.join('/Users/Ooga/Desktop/Skin-Analyzer/pythonServer/components/'+str(args["user"]) , 'component'+str(countourCount)+'.jpg'), orig)
+#	cv2.imwrite(os.path.join('/Users/Ooga/Desktop/Skin-Analyzer/pythonServer/components/'+str(args["user"]) , 'component'+str(countourCount)+'.jpg'), orig)
 	cv2.waitKey(0)
 
 # Make sure data is committed to the database
